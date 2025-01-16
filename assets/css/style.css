@@ -1,0 +1,277 @@
+/* Test styles for basic elements */
+body {
+    font-family: 'Lora', serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+#background-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+}
+
+.payroll-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #007bff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+h2 {
+    color: #343a40;
+    border-bottom: 1px solid #343a40;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #495057;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-prefix {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-right: none;
+    padding: 10px;
+    border-radius: 4px 0 0 4px;
+    color: #495057;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #e9ecef;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    color: #6c757d;
+}
+
+.input-group input {
+    border-radius: 0 4px 4px 0;
+    border-left: none;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+ul li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+button, .file-label {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+    display: inline-block;
+    text-align: center;
+}
+
+button:hover, .file-label:hover {
+    background-color: #0056b3;
+}
+
+.file-label {
+    position: relative;
+    overflow: hidden;
+}
+
+.file-label input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#net-salary {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #28a745;
+}
+
+.show-calculations-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #2f6a56;
+    color: #ffffff;
+    padding: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.show-calculations-button:hover {
+    background-color: #224a38;
+}
+
+.show-calculations-button .button-icon {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+#calculations {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #343a40;
+}
+
+/* Ícone ao lado do título */
+.title-icon {
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.saved-form {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.saved-form button {
+    background-color: #6c757d;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.saved-form button:hover {
+    background-color: #5a6268;
+}
+
+.saved-form .delete-button {
+    background-color: #6c757d;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.saved-form .delete-button:hover {
+    background-color: #5a6268;
+}
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+    .payroll-container {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    button, .file-label {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .title-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .show-calculations-button {
+        padding: 10px;
+    }
+
+    .show-calculations-button .button-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .payroll-container {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    p, li {
+        font-size: 14px;
+    }
+
+    button, .file-label {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .title-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .show-calculations-button {
+        padding: 8px;
+    }
+
+    .show-calculations-button .button-icon {
+        width: 20px;
+        height: 20px;
+    }
+}

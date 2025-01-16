@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculos de Descontos e Adicionais</title>
+    <link rel="icon" href="./assets/images/icon.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="./assets/videos/background.mp4" type="video/mp4">
+        Seu navegador não suporta o elemento de vídeo.
+    </video>
+    <div class="payroll-container">
+        <header>
+            <h1>
+                <img src="./assets/images/icon.png" alt="Ícone de Folha de Pagamento" class="title-icon"> 
+                Folha de Pagamento
+            </h1>
+        </header>
+        
+        <form id="payroll-form">
+            <section>
+                <h2>Informações do Trabalhador</h2>
+                <label for="worker-name">Nome do Trabalhador:</label>
+                <input type="text" id="worker-name" name="worker-name" required onkeydown="focusNext(event)">
+                
+                <label for="company">Empresa:</label>
+                <input type="text" id="company" name="company" required onkeydown="focusNext(event)">
+                
+                <label for="position">Cargo:</label>
+                <input type="text" id="position" name="position" required onkeydown="focusNext(event)">
+                
+                <label for="department">Área:</label>
+                <input type="text" id="department" name="department" required onkeydown="focusNext(event)">
+            </section>
+
+            <section>
+                <h2>Descontos</h2>
+                <label for="vr">VR (Vale Refeição):</label>
+                <input type="text" id="vr" name="vr" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+                
+                <label for="inss">INSS:</label>
+                <input type="text" id="inss" name="inss" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+                
+                <label for="vt">Vale Transporte:</label>
+                <input type="text" id="vt" name="vt" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+                
+                <label for="health-plan">Plano de Saúde:</label>
+                <input type="text" id="health-plan" name="health-plan" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+                
+                <label for="dental-plan">Odontológico:</label>
+                <input type="text" id="dental-plan" name="dental-plan" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+            </section>
+
+            <section>
+                <h2>Adicionais</h2>
+                <label for="extra-hours">Horas Extras:</label>
+                <input type="text" id="extra-hours" name="extra-hours" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+                
+                <label for="performance-bonus">Bonificação por Desempenho:</label>
+                <input type="text" id="performance-bonus" name="performance-bonus" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+                
+                <label for="daycare-assistance">Auxílio Creche:</label>
+                <input type="text" id="daycare-assistance" name="daycare-assistance" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+            </section>
+
+            <section>
+                <label for="gross-salary">Salário Bruto:</label>
+                <input type="text" id="gross-salary" name="gross-salary" placeholder="R$ 0,00" required onblur="formatCurrency(this)" onkeydown="focusNext(event)">
+            </section>
+            
+
+            <button type="button" id="calculate-btn" onclick="toggleCalculations()">Calcular Salário Líquido</button>
+            
+            <button type="button" onclick="saveForm()">Salvar Formulário</button>
+            <button type="button" onclick="exportToExcel()">Exportar para Excel</button>
+            
+            <label class="file-label">
+                <input type="file" id="import-file" accept=".xlsx" onchange="importFromExcel(event)">
+                Escolher Arquivo
+            </label>
+        </form>
+
+        <div id="calculations" style="display: none;">
+            <p>Salário Bruto: <span id="gross-salary-output">R$ 0,00</span></p>
+            <p>Descontos: <span id="deductions-output">R$ 0,00</span></p>
+            <p>Adicionais: <span id="additions-output">R$ 0,00</span></p>
+            <p><strong>Salário Líquido: <span id="net-salary-output">R$ 0,00</span></strong></p>
+        </div>
+
+        <section>
+            <h2>Formulários Salvos</h2>
+            <div id="saved-forms"></div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
