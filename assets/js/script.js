@@ -1,56 +1,3 @@
-let calculationsVisible = false;
-
-function calculateNetSalary() {
-    const calculationsDiv = document.getElementById('calculations');
-    const grossSalary = parseFloat(document.getElementById('gross-salary').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const vr = parseFloat(document.getElementById('vr').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const inss = parseFloat(document.getElementById('inss').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const vt = parseFloat(document.getElementById('vt').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const healthPlan = parseFloat(document.getElementById('health-plan').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const dentalPlan = parseFloat(document.getElementById('dental-plan').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-
-    const totalDiscounts = vr + inss + vt + healthPlan + dentalPlan;
-    const extraHours = parseFloat(document.getElementById('extra-hours').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const performanceBonus = parseFloat(document.getElementById('performance-bonus').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const daycareAssistance = parseFloat(document.getElementById('daycare-assistance').value.replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-
-    const totalAdditions = extraHours + performanceBonus + daycareAssistance;
-    const netSalary = grossSalary - totalDiscounts + totalAdditions;
-
-    document.getElementById('net-salary').innerText = `Salário Líquido: R$ ${netSalary.toFixed(2).replace('.', ',')}`;
-
-    const calculations = `
-        <p><strong>Salário Bruto:</strong> R$ ${grossSalary.toFixed(2).replace('.', ',')}</p>
-        <p><strong>Descontos:</strong></p>
-        <ul>
-            <li>VR (Vale Refeição): R$ ${vr.toFixed(2).replace('.', ',')}</li>
-            <li>INSS: R$ ${inss.toFixed(2).replace('.', ',')}</li>
-            <li>Vale Transporte: R$ ${vt.toFixed(2).replace('.', ',')}</li>
-            <li>Plano de Saúde: R$ ${healthPlan.toFixed(2).replace('.', ',')}</li>
-            <li>Odontológico: R$ ${dentalPlan.toFixed(2).replace('.', ',')}</li>
-        </ul>
-        <p><strong>Total de Descontos:</strong> R$ ${totalDiscounts.toFixed(2).replace('.', ',')}</p>
-        <p><strong>Adicionais:</strong></p>
-        <ul>
-            <li>Horas Extras: R$ ${extraHours.toFixed(2).replace('.', ',')}</li>
-            <li>Bonificação por Desempenho: R$ ${performanceBonus.toFixed(2).replace('.', ',')}</li>
-            <li>Auxílio Creche: R$ ${daycareAssistance.toFixed(2).replace('.', ',')}</li>
-        </ul>
-        <p><strong>Total de Adicionais:</strong> R$ ${totalAdditions.toFixed(2).replace('.', ',')}</p>
-        <p><strong>Salário Líquido:</strong> R$ ${netSalary.toFixed(2).replace('.', ',')}</p>
-    `;
-
-    // Exibe os cálculos se não estiverem visíveis
-    if (!calculationsVisible) {
-        calculationsDiv.innerHTML = calculations;
-        localStorage.setItem('calculations', calculations);
-        calculationsVisible = true;
-    } else {
-        calculationsDiv.innerHTML = '';
-        calculationsVisible = false;
-    }
-}
-
 function formatCurrency(input) {
     let value = input.value.replace(/\D/g, '');
     value = (value / 100).toFixed(2) + '';
@@ -112,7 +59,10 @@ function loadForm(index) {
 
     for (const key in form) {
         if (form.hasOwnProperty(key)) {
-            document.getElementById(key).value = form[key];
+            const element = document.getElementById(key);
+            if (element) {
+                element.value = form[key];
+            }
         }
     }
 }
@@ -142,128 +92,38 @@ function exportToExcel() {
         "Empresa": form["company"],
         "Cargo": form["position"],
         "Área": form["department"],
-        "VR (Vale Refeição)": parseFloat(form["vr"] || 0),
-        "INSS": parseFloat(form["inss"] || 0),
-        "Vale Transporte": parseFloat(form["vt"] || 0),
-        "Plano de Saúde": parseFloat(form["health-plan"] || 0),
-        "Odontológico": parseFloat(form["dental-plan"] || 0),
+        "VR (Vale Refeição)": parseFloat(form["vr"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
+        "INSS": parseFloat(form["inss"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
+        "Vale Transporte": parseFloat(form["vt"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
+        "Plano de Saúde": parseFloat(form["health-plan"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
+        "Odontológico": parseFloat(form["dental-plan"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
         "Total de Descontos": 
-            parseFloat(form["vr"] || 0) +
-            parseFloat(form["inss"] || 0) +
-            parseFloat(form["vt"] || 0) +
-            parseFloat(form["health-plan"] || 0) +
-            parseFloat(form["dental-plan"] || 0),
-        "Horas Extras": parseFloat(form["extra-hours"] || 0),
-        "Bonificação por Desempenho": parseFloat(form["performance-bonus"] || 0),
-        "Auxílio Creche": parseFloat(form["daycare-assistance"] || 0),
+            (parseFloat(form["vr"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["inss"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["vt"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["health-plan"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["dental-plan"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0),
+        "Horas Extras": parseFloat(form["extra-hours"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
+        "Bonificação por Desempenho": parseFloat(form["performance-bonus"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
+        "Auxílio Creche": parseFloat(form["daycare-assistance"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
         "Total de Adicionais": 
-            parseFloat(form["extra-hours"] || 0) +
-            parseFloat(form["performance-bonus"] || 0) +
-            parseFloat(form["daycare-assistance"] || 0),
-        "Salário Bruto": parseFloat(form["gross-salary"] || 0),
+            (parseFloat(form["extra-hours"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["performance-bonus"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["daycare-assistance"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0),
+        "Salário Bruto": parseFloat(form["gross-salary"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0,
         "Salário Líquido": 
-            parseFloat(form["gross-salary"] || 0) -
-            (parseFloat(form["vr"] || 0) +
-            parseFloat(form["inss"] || 0) +
-            parseFloat(form["vt"] || 0) +
-            parseFloat(form["health-plan"] || 0) +
-            parseFloat(form["dental-plan"] || 0)) +
-            (parseFloat(form["extra-hours"] || 0) +
-            parseFloat(form["performance-bonus"] || 0) +
-            parseFloat(form["daycare-assistance"] || 0)),
+            (parseFloat(form["gross-salary"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) -
+            ((parseFloat(form["vr"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["inss"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["vt"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["health-plan"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["dental-plan"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0)) +
+            ((parseFloat(form["extra-hours"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["performance-bonus"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0) +
+            (parseFloat(form["daycare-assistance"].replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0)),
     }));
 
-    const worksheet = XLSX.utils.json_to_sheet(formattedData, { origin: "A4" });
-
-    // Personalização visual
-    const headers = [
-        "Informações do Trabalhador", "", "", "",
-        "Descontos", "", "", "", "", "Total de Descontos",
-        "Adicionais", "", "", "Total de Adicionais",
-        "Resumo Final", "Salário Líquido"
-    ];
-    const subHeaders = Object.keys(formattedData[0]);
-
-    // Mesclando células para os cabeçalhos principais
-    worksheet["!merges"] = [
-        { s: { r: 0, c: 0 }, e: { r: 0, c: 15 } }, // Nome da Empresa
-        { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } }, // Informações do Trabalhador
-        { s: { r: 1, c: 4 }, e: { r: 1, c: 9 } }, // Descontos
-        { s: { r: 1, c: 10 }, e: { r: 1, c: 13 } }, // Adicionais
-        { s: { r: 1, c: 14 }, e: { r: 1, c: 15 } } // Resumo Final
-    ];
-
-    // Adicionando nome da empresa
-    worksheet['A1'] = {
-        v: "Nome da Empresa",
-        s: {
-            font: { bold: true, color: { rgb: "FFFFFF" }, sz: 20, name: "Arial Black" },
-            fill: { fgColor: { rgb: "4F81BD" } },
-            alignment: { horizontal: "center", vertical: "center" },
-            border: { top: { style: "thin" }, bottom: { style: "thin" }, left: { style: "thin" }, right: { style: "thin" } }
-        }
-    };
-
-    // Adicionando cabeçalhos principais
-    headers.forEach((header, colIndex) => {
-        const cellAddress = XLSX.utils.encode_cell({ r: 1, c: colIndex });
-        worksheet[cellAddress] = {
-            v: header,
-            s: {
-                font: { bold: true, color: { rgb: "FFFFFF" }, sz: 14 },
-                fill: { fgColor: { rgb: "4F81BD" } },
-                alignment: { horizontal: "center", vertical: "center" },
-                border: { top: { style: "thin" }, bottom: { style: "thin" }, left: { style: "thin" }, right: { style: "thin" } }
-            }
-        };
-    });
-
-    // Adicionando subcabeçalhos
-    subHeaders.forEach((header, colIndex) => {
-        const cellAddress = XLSX.utils.encode_cell({ r: 2, c: colIndex });
-        worksheet[cellAddress] = {
-            v: header,
-            s: {
-                font: { bold: true, color: { rgb: "000000" }, sz: 12 },
-                alignment: { horizontal: "center", vertical: "center" },
-                fill: { fgColor: { rgb: "D9EAD3" } },
-                border: {
-                    top: { style: "thin" },
-                    bottom: { style: "thin" },
-                    left: { style: "thin" },
-                    right: { style: "thin" }
-                }
-            }
-        };
-    });
-
-    // Alternância de cores (zebrado)
-    formattedData.forEach((row, rowIndex) => {
-        const isEven = rowIndex % 2 === 0;
-        Object.keys(row).forEach((key, colIndex) => {
-            const cellAddress = XLSX.utils.encode_cell({ r: rowIndex + 3, c: colIndex });
-            worksheet[cellAddress] = {
-                v: row[key],
-                s: {
-                    fill: { fgColor: { rgb: isEven ? "F2F2F2" : "FFFFFF" } }, // Linhas alternadas
-                    border: {
-                        top: { style: "thin" },
-                        bottom: { style: "thin" },
-                        left: { style: "thin" },
-                        right: { style: "thin" }
-                    },
-                    alignment: { horizontal: "center", vertical: "center" }
-                }
-            };
-        });
-    });
-
-    // Criando o workbook
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Folha de Pagamento");
-
-    // Salvando o arquivo
-    XLSX.writeFile(workbook, "Folha de Pagamentos.xlsx");
+    createAndFormatSpreadsheet(formattedData);
 }
 
 function importFromExcel(event) {
@@ -291,4 +151,132 @@ function importFromExcel(event) {
     reader.readAsArrayBuffer(file);
 }
 
-document.addEventListener('DOMContentLoaded', displaySavedForms);
+function createAndFormatSpreadsheet(formattedData) {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet([]);
+
+    // Mesclar células A1:X8 e adicionar estilo
+    worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 7, c: 23 } }]; // A1 até X8
+    worksheet['A1'] = { v: 'Título do Relatório', t: 's', s: {
+        alignment: { horizontal: 'center', vertical: 'center' },
+        fill: { fgColor: { rgb: '0056B3' } },
+        font: { color: { rgb: 'FFFDD0' }, bold: true }
+    }};
+
+    // Definir os títulos e posições
+    const titles = [
+        'Informações do Trabalhador',
+        'Nome do Trabalhador:', 'Empresa:', 'Cargo:', 'Área:',
+        'Descontos',
+        'VR (Vale Refeição):', 'INSS:', 'Vale Transporte:', 'Plano de Saúde:', 'Odontológico:',
+        'Adicionais',
+        'Horas Extras:', 'Bonificação por Desempenho:', 'Auxílio Creche:', 'Salário Bruto:'
+    ];
+
+    let startRow = 8; // Linha inicial (23 na planilha, considerando índice 0)
+    let startCol = 0; // Coluna inicial (L)
+
+    titles.forEach((title, index) => {
+        const cellRef = XLSX.utils.encode_cell({ r: startRow + index, c: startCol });
+        worksheet[cellRef] = {
+            v: title,
+            t: 's',
+            s: {
+                alignment: { wrapText: true },
+                font: { bold: index === 0 || index === 5 || index === 11 } // Negrito para cabeçalhos
+            }
+        };
+    });
+
+    // Adicionar células para valores à direita
+    titles.forEach((_, index) => {
+        const valueCellRef = XLSX.utils.encode_cell({ r: startRow + index, c: startCol + 1 });
+        worksheet[valueCellRef] = {
+            v: '',
+            t: 'n', // Formato numérico
+            z: '\u00A4#,##0.00' // Formato de contabilização
+        };
+    });
+
+    // Configurar largura das colunas
+    worksheet['!cols'] = [
+        { wch: 30 }, // Largura da coluna dos títulos
+        { wch: 20 }  // Largura da coluna dos valores
+    ];
+
+    // Adicionar a folha ao workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Folha de Pagamento');
+
+    // Adicionar dados formatados
+    XLSX.utils.sheet_add_json(worksheet, formattedData, { origin: "A9", skipHeader: true });
+
+    // Salvar o arquivo Excel
+    XLSX.writeFile(workbook, 'Folha_de_Pagamento.xlsx');
+}
+
+let calculationsVisible = false;
+
+function calculateNetSalary() {
+    const grossSalaryElement = document.getElementById('gross-salary');
+    const vrElement = document.getElementById('vr');
+    const inssElement = document.getElementById('inss');
+    const vtElement = document.getElementById('vt');
+    const healthPlanElement = document.getElementById('health-plan');
+    const dentalPlanElement = document.getElementById('dental-plan');
+    const extraHoursElement = document.getElementById('extra-hours');
+    const performanceBonusElement = document.getElementById('performance-bonus');
+    const daycareAssistanceElement = document.getElementById('daycare-assistance');
+  
+    // Function to parse and format currency 
+    function parseCurrency(value) {
+      return parseFloat(value.replace('R$', '').replace('.', '').replace(',', '.')) || 0;
+    }
+  
+    const grossSalary = parseCurrency(grossSalaryElement.value);
+    const vr = parseCurrency(vrElement.value);
+    const inss = parseCurrency(inssElement.value);
+    const vt = parseCurrency(vtElement.value);
+    const healthPlan = parseCurrency(healthPlanElement.value);
+    const dentalPlan = parseCurrency(dentalPlanElement.value);
+    const extraHours = parseCurrency(extraHoursElement.value);
+    const performanceBonus = parseCurrency(performanceBonusElement.value);
+    const daycareAssistance = parseCurrency(daycareAssistanceElement.value);
+  
+    const totalDiscounts = vr + inss + vt + healthPlan + dentalPlan;
+    const totalAdditions = extraHours + performanceBonus + daycareAssistance;
+    const netSalary = grossSalary - totalDiscounts + totalAdditions;
+  
+    const calculations = `
+      <p><strong>Salário Bruto:</strong> R$ ${grossSalary.toFixed(2).replace('.', ',')}</p>
+      <p><strong>Descontos:</strong></p>
+      <ul>
+        <li>VR (Vale Refeição): R$ ${vr.toFixed(2).replace('.', ',')}</li>
+        <li>INSS: R$ ${inss.toFixed(2).replace('.', ',')}</li>
+        <li>Vale Transporte: R$ ${vt.toFixed(2).replace('.', ',')}</li>
+        <li>Plano de Saúde: R$ ${healthPlan.toFixed(2).replace('.', ',')}</li>
+        <li>Odontológico: R$ ${dentalPlan.toFixed(2).replace('.', ',')}</li>
+      </ul>
+      <p><strong>Total de Descontos:</strong> R$ ${totalDiscounts.toFixed(2).replace('.', ',')}</p>
+      <p><strong>Adicionais:</strong></p>
+      <ul>
+        <li>Horas Extras: R$ ${extraHours.toFixed(2).replace('.', ',')}</li>
+        <li>Bonificação por Desempenho: R$ ${performanceBonus.toFixed(2).replace('.', ',')}</li>
+        <li>Auxílio Creche: R$ ${daycareAssistance.toFixed(2).replace('.', ',')}</li>
+      </ul>
+      <p><strong>Total de Adicionais:</strong> R$ ${totalAdditions.toFixed(2).replace('.', ',')}</p>
+      <p><strong>Salário Líquido:</strong> R$ ${netSalary.toFixed(2).replace('.', ',')}</p>
+    `;
+  
+    const calculationsContainer = document.getElementById('calculations');
+    calculationsContainer.innerHTML = calculations;
+    calculationsVisible = !calculationsVisible;
+    calculationsContainer.style.display = calculationsVisible ? 'block' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    displaySavedForms();
+    document.getElementById('payroll-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        calculateNetSalary();
+    });
+});
